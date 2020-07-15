@@ -7,6 +7,7 @@ const Flashcard = ({ flashCard }) => {
   const frontEl = useRef();
   const backEl = useRef();
 
+  // flashcard size fits by its content size
   function setMaxHeight() {
     const frontHeight = frontEl.current.getBoundingClientRect().height;
     const backHeight = backEl.current.getBoundingClientRect().height;
@@ -20,6 +21,11 @@ const Flashcard = ({ flashCard }) => {
     flashCard.option,
   ]);
 
+  useEffect(() => {
+    window.addEventListener("resize", setMaxHeight);
+    return () => window.removeEventListener("resize", setMaxHeight);
+  });
+
   return (
     <div
       className={`card ${flip ? "flip" : ""}`}
@@ -30,7 +36,11 @@ const Flashcard = ({ flashCard }) => {
         {flashCard.question}
         <div className="flashcard-options">
           {flashCard.options.map((option) => {
-            return <div className="flashcard-option">{option}</div>;
+            return (
+              <div className="flashcard-option" key={option}>
+                {option}
+              </div>
+            );
           })}
         </div>
       </div>
